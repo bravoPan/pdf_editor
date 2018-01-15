@@ -11,11 +11,11 @@ class Editor(object):
                 # MediaBox defines the height and width of this page
                 source_file_size = input_file.getPage(0)['/MediaBox']
                 height, width = source_file_size[3], source_file_size[2]
+                output_stream = self.copy_output_stream(file_path)
                 page_num = input_file.numPages
                 if page_num % 2 != 0:
-                    output_stream = self.copy_output_stream(file_path)
                     output_stream.addBlankPage(height=height, width=width)
-                    return output_stream
+                return output_stream
             except IndexError:
                 print("This size attribute is not right")
 
@@ -105,4 +105,5 @@ class Editor(object):
 
 if __name__ == "__main__":
     ed = Editor()
-    ed.merge_dir("/Users/yuanxiansen/Desktop/skill/programming/python/pdf_editor/local")
+    ed.merge_file("/Users/yuanxiansen/Desktop/skill/programming/python/pdf_editor/local/paper2.pdf",
+                 "/Users/yuanxiansen/Desktop/skill/programming/python/pdf_editor/local/paper1.pdf", single_mode=True)
