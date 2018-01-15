@@ -56,7 +56,7 @@ class Editor(object):
             return self._recursive_merge_two_pdf(input_stream, work_list)
 
     # merge a dir containing all pdf files
-    def merge_dir(self, dir_path, save_dir="./", save_name="merged"):
+    def merge_dir(self, dir_path, save_dir="./", save_name="merged", single_mode=False):
         if self.check_path(save_dir):
             if self.check_path(dir_path):
                 # do modify to the path and name in order to avoid user add postfix
@@ -69,12 +69,9 @@ class Editor(object):
                     # check if user add "/" at the end of the path
                     if self.check_pdf_file(dir_path + i):
                         pdf_list.append(dir_path + i)
-                singe_mode = input(
-                    "Do you want to merge file adding blank page if the number of single pdf is odd? y/n")
                 merged_files = PdfFileMerger()
-                if singe_mode == "y":
+                if single_mode:
                     self._recursive_merge_two_pdf(merged_files, pdf_list, single_mode=True)
-
                 else:
                     self._recursive_merge_two_pdf(merged_files, pdf_list)
                 merged_files.write(open(save_dir + save_name, "wb"))
