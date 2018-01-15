@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 import optparse
 from pdf_main import Editor
+import sys
 
 
 class Controller(object):
-    def __init__(self):
+    def __init__(self, single_mode):
+        self.single_mode = single_mode
         self.opt = optparse.OptionParser()
         self._add_options()
         self.pdf_editor = Editor()
@@ -18,9 +20,8 @@ class Controller(object):
                             dest="directory_name", default=None)
         self.opt.add_option("--single-mode", "-s",
                             help="merge file which is beneficial for printing, add blank paper if the "
-                                 "original pdf is odd", default=True, dest="single_mode")
+                                 "original pdf is odd", default=True, dest="single_mode", nargs=0)
         self.options, self.arguments = self.opt.parse_args()
-        print(self.opt.largs)
 
     # event_trigger, calling the functions according to options
 
@@ -39,18 +40,19 @@ class Controller(object):
     def merge_two_files(self):
         save_dest = input("Do you want to save at current directory?y/s ")
         if save_dest == "y":
-            self.pdf_editor.merge_file(self.options.filename[0], self.options.filename[1])
+            self.pdf_editor.merge_file(self.options.filename[0], self.options.filename[1], single_mode=self.single_mode)
         else:
             save_dest = input("Where else do you want to save? ")
-            self.pdf_editor.merge_file(self.options.filename[0], self.options.filename[1], save_dest)
+            self.pdf_editor.merge_file(self.options.filename[0], self.options.filename[1], save_dest,
+                                       single_mode=self.single_mode)
 
     def merge_dir(self):
         save_dest = input("Do you want to save at current directory?y/s ")
         if save_dest == "y":
-            self.pdf_editor.merge_dir(self.options.directory_name)
+            self.pdf_editor.merge_dir(self.options.directory_name, single_mode=self.single_mode)
         else:
             save_dest = input("Where else do you want to save? ")
-            self.pdf_editor.merge_dir(self.options.directory_name, save_dest)
+            self.pdf_editor.merge_dir(self.options.directory_name, save_dest, single_mode=self.single_mode)
 
 
 def main():
@@ -64,10 +66,19 @@ def main():
                       "a new dir.", dest="filename", nargs=2)
     p.add_option("--single-mode", "-s", default=True, dest="single-mode")
     options, arguments = p.parse_args()
-    print(options)
 
     editor.merge_file(options.filename[0], options.filename[1])
 
 
+# justify if the -s in the command line
+def jude_single_mode(argv):
+    if "-s" in argv:
+        return True
+    else:
+        return False
+
+
 if __name__ == '__main__':
-    test = Controller()
+    commands = sys.argv
+    single_mode = jude_single_mode(commands)
+    test = Controller(single_mode=single_mode)
