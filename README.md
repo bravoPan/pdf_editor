@@ -13,18 +13,18 @@ the workflow is adding blank page after one odd files. In this way, the merged t
 out and the same as printed once at time. 
 
 ```command line 
-controller -s (-m/-d)
+python3 controller -s (-m/-d)
 ```
 
 #### merge two files 
 
 ```command line 
-controller -m [file1_path] [file2_path]
+python3 controller -m [file1_path] [file2_path]
 ```
 
 #### merge a dir 
 
 ```command line 
-controller -d [filename1] [filename2]
+python3 controller -d [filename1] [filename2]
 ```
 
